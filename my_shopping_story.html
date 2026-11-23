@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Shopping Story</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7f6;color:#202522}
+header{background:#087f5b;color:white;padding:18px 14px;text-align:center}
+header h1{margin:0;font-size:25px}header p{margin:7px 0 0;font-size:14px}
+main{max-width:900px;margin:auto;padding:16px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+input{width:100%;padding:12px;border:1px solid #ccd5d0;border-radius:9px;font-size:16px;margin:12px 0}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.product,.cart{background:white;border-radius:12px;padding:13px;box-shadow:0 2px 8px #0000000c}
+.pic{font-size:52px;text-align:center;background:#eef5f1;border-radius:9px;padding:15px}
+.product h3{margin:10px 0 5px;font-size:17px}.price{font-weight:bold;color:#087f5b;margin:7px 0 10px}
+button{border:0;background:#087f5b;color:white;padding:10px 12px;border-radius:8px;font-size:14px}
+.cart{margin-top:20px}.cart ul{padding-left:20px}.muted{color:#68736d;font-size:13px}
+@media(min-width:650px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header><h1>🛍️ My Shopping Story</h1><p>তোমার পছন্দের কেনাকাটার জায়গা</p></header>
+<main>
+<div class="top"><h2>আমাদের পণ্য</h2><strong>🛒 কার্ট: <span id="count">0</span></strong></div>
+<input id="search" type="search" placeholder="পণ্য খুঁজুন..." oninput="showProducts()">
+<div class="products" id="products"></div>
+<section class="cart">
+<h2>🛒 আমার কার্ট</h2>
+<ul id="cart"><li class="muted">এখনও কোনো পণ্য যোগ করা হয়নি।</li></ul>
+<h3>মোট: ₹<span id="total">0</span></h3>
+<button onclick="clearCart()">কার্ট খালি করো</button>
+<p class="muted">এটি একটি ডেমো অ্যাপ। এখনো অনলাইন অর্ডার বা পেমেন্ট চালু নেই।</p>
+</section>
+</main>
+<script>
+const items=[
+ {name:"টি-শার্ট",price:299,emoji:"👕"},
+ {name:"জুতো",price:799,emoji:"👟"},
+ {name:"ঘড়ি",price:499,emoji:"⌚"},
+ {name:"ব্যাগ",price:599,emoji:"🎒"},
+ {name:"হেডফোন",price:699,emoji:"🎧"},
+ {name:"বই",price:199,emoji:"📚"},
+ {name:"সানগ্লাস",price:249,emoji:"🕶️"},
+ {name:"ফুটবল",price:399,emoji:"⚽"}
+];
+let cart=[];
+function showProducts(){
+ const q=document.getElementById("search").value.toLowerCase();
+ document.getElementById("products").innerHTML=items.filter(x=>x.name.toLowerCase().includes(q)).map((x,i)=>`
+ <article class="product"><div class="pic">${x.emoji}</div><h3>${x.name}</h3>
+ <div class="price">₹${x.price}</div><button onclick="addCart('${x.name}',${x.price})">কার্টে যোগ করো</button></article>`).join("")||"<p>কোনো পণ্য পাওয়া যায়নি।</p>";
+}
+function addCart(name,price){cart.push({name,price});renderCart()}
+function renderCart(){
+ document.getElementById("count").textContent=cart.length;
+ document.getElementById("cart").innerHTML=cart.length?cart.map(x=>`<li>${x.name} — ₹${x.price}</li>`).join(""):'<li class="muted">এখনও কোনো পণ্য যোগ করা হয়নি।</li>';
+ document.getElementById("total").textContent=cart.reduce((s,x)=>s+x.price,0);
+}
+function clearCart(){cart=[];renderCart()}
+showProducts();
+</script>
+</body>
+</html>
